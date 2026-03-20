@@ -159,12 +159,12 @@
     },
     "colors": [
       {
-        "id": "aside.rulerColor",
-        "description": "Color for comment indicators in the overview ruler",
+        "id": "aside.indicatorColor",
+        "description": "Color for comment indicators",
         "defaults": {
-          "dark": "#FFA500AA",
-          "light": "#FF8C00AA",
-          "highContrast": "#FFD700"
+          "dark": "#007acc",
+          "light": "#005a9e",
+          "highContrast": "#007ACC"
         }
       }
     ],

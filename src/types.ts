@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 
 export const COMMENT_COLORS = [
-	'#FFA500', // orange (default)
-	'#4FC3F7', // blue
+	'#007ACC', // blue (default)
+	'#FFA500', // orange
 	'#81C784', // green
 	'#E57373', // red
 	'#BA68C8', // purple
