@@ -333,10 +333,10 @@ export class CommentStore {
 		// Try git config user.name via shell
 		try {
 			const cp = require('child_process');
-			const gitName = cp.execSync('git config user.name', { encoding: 'utf-8', timeout: 2000 }).trim();
+			const gitName: string = cp.execSync('git config user.name', { encoding: 'utf-8', timeout: 2000 }).trim();
 			if (gitName) {
 				this.cachedAuthor = gitName;
-				return this.cachedAuthor;
+				return gitName;
 			}
 		} catch {
 			// git not available
