@@ -39,10 +39,14 @@ export function activate(context: vscode.ExtensionContext): void {
 		)
 	);
 
-	// Toggle panel command — opens/focuses the comments panel
+	// Toggle panel command — opens or closes the comments panel
 	context.subscriptions.push(
 		vscode.commands.registerCommand('aside.togglePanel', () => {
-			vscode.commands.executeCommand('aside.commentsPanel.focus');
+			if (panelProvider.visible) {
+				vscode.commands.executeCommand('workbench.action.closeAuxiliaryBar');
+			} else {
+				vscode.commands.executeCommand('aside.commentsPanel.focus');
+			}
 		})
 	);
 

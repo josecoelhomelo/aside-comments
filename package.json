@@ -109,7 +109,7 @@
         {
           "command": "aside.togglePanel",
           "group": "navigation@3",
-          "when": "editorTextFocus"
+          "when": "activeEditor"
         }
       ],
       "explorer/context": [

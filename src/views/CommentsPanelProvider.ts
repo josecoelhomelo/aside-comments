@@ -7,6 +7,7 @@ export class CommentsPanelProvider implements vscode.WebviewViewProvider {
 	public static readonly viewType = 'aside.commentsPanel';
 
 	private view?: vscode.WebviewView;
+	private _visible = false;
 	private currentUri?: vscode.Uri;
 	private webviewReady = false;
 	private readyCallbacks: Array<() => void> = [];
@@ -33,6 +34,10 @@ export class CommentsPanelProvider implements vscode.WebviewViewProvider {
 			null,
 			context.subscriptions
 		);
+	}
+
+	get visible(): boolean {
+		return this._visible;
 	}
 
 	/**
@@ -139,10 +144,13 @@ export class CommentsPanelProvider implements vscode.WebviewViewProvider {
 		);
 
 		webviewView.onDidChangeVisibility(() => {
+			this._visible = webviewView.visible;
 			if (webviewView.visible) {
 				this.sendComments();
 			}
 		});
+
+		this._visible = true;
 
 		const editor = vscode.window.activeTextEditor;
 		if (editor) {
