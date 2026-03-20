@@ -3,7 +3,7 @@
 src/**
 test/**
 node_modules/**
-.production/**
+.project/**
 .gitignore
 tsconfig.json
 esbuild.config.mjs
