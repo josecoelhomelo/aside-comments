@@ -1,0 +1,219 @@
+{
+  "name": "aside",
+  "displayName": "Aside Comments",
+  "description": "Word-style margin comments on code files, stored separately from source code.",
+  "version": "0.1.0",
+  "publisher": "josecoelhomelo",
+  "author": {
+    "name": "josecoelhomelo"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/josecoelhomelo/aside-comments"
+  },
+  "homepage": "https://github.com/josecoelhomelo/aside-comments#readme",
+  "bugs": {
+    "url": "https://github.com/josecoelhomelo/aside-comments/issues"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "icon": "resources/aside-icon.png",
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "aside.addComment",
+        "title": "Add Comment",
+        "category": "Aside",
+        "icon": "$(add)"
+      },
+      {
+        "command": "aside.addFileComment",
+        "title": "Add File Comment",
+        "category": "Aside",
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "aside.editComment",
+        "title": "Edit Comment",
+        "category": "Aside"
+      },
+      {
+        "command": "aside.deleteComment",
+        "title": "Delete Comment",
+        "category": "Aside"
+      },
+      {
+        "command": "aside.nextComment",
+        "title": "Go to Next Comment",
+        "category": "Aside",
+        "icon": {
+          "light": "resources/light/comment-next.svg",
+          "dark": "resources/dark/comment-next.svg"
+        }
+      },
+      {
+        "command": "aside.togglePanel",
+        "title": "Toggle Comments Panel",
+        "category": "Aside",
+        "icon": "resources/aside-icon.svg"
+      },
+      {
+        "command": "aside.previousComment",
+        "title": "Go to Previous Comment",
+        "category": "Aside",
+        "icon": {
+          "light": "resources/light/comment-previous.svg",
+          "dark": "resources/dark/comment-previous.svg"
+        }
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "aside.addComment",
+        "key": "ctrl+shift+m",
+        "mac": "cmd+shift+m",
+        "when": "editorTextFocus"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "aside.addComment",
+          "group": "aside@1"
+        },
+        {
+          "command": "aside.addFileComment",
+          "group": "aside@2"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "aside.previousComment",
+          "group": "navigation@1",
+          "when": "aside.hasLineComments"
+        },
+        {
+          "command": "aside.nextComment",
+          "group": "navigation@2",
+          "when": "aside.hasLineComments"
+        },
+        {
+          "command": "aside.togglePanel",
+          "group": "navigation@3",
+          "when": "editorTextFocus"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "aside.addFileComment",
+          "group": "aside",
+          "when": "resourceScheme == file"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "aside.addFileComment",
+          "group": "aside",
+          "when": "resourceScheme == file"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "aside.addComment",
+          "when": "view == aside.commentsPanel",
+          "group": "navigation"
+        },
+        {
+          "command": "aside.addFileComment",
+          "when": "view == aside.commentsPanel",
+          "group": "navigation"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "aside",
+          "title": "Aside Comments",
+          "icon": "resources/aside-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "aside": [
+        {
+          "type": "webview",
+          "id": "aside.commentsPanel",
+          "name": "Comments"
+        }
+      ]
+    },
+    "colors": [
+      {
+        "id": "aside.rulerColor",
+        "description": "Color for comment indicators in the overview ruler",
+        "defaults": {
+          "dark": "#FFA500AA",
+          "light": "#FF8C00AA",
+          "highContrast": "#FFD700"
+        }
+      }
+    ],
+    "configuration": {
+      "title": "Aside Comments",
+      "properties": {
+        "aside.author": {
+          "type": "string",
+          "default": "",
+          "description": "Default author name for new comments. If empty, uses OS username."
+        },
+        "aside.storagePath": {
+          "type": "string",
+          "default": ".aside",
+          "description": "Folder name for storing comment files, relative to workspace root."
+        },
+        "aside.fuzzyMatchThreshold": {
+          "type": "number",
+          "default": 0.7,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Similarity threshold (0-1) for fuzzy re-attaching orphaned comments."
+        },
+        "aside.showMinimapIndicators": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show color indicators in the minimap/overview ruler for commented lines."
+        },
+        "aside.showGutterLines": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show comment indications in the editor gutter."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap",
+    "watch": "npm run compile -- --watch",
+    "package": "npm run compile -- --minify",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.2.0"
+  }
+}

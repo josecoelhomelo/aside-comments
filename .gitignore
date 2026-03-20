@@ -1,0 +1,5 @@
+.production/
+.vscode-test/
+dist/
+node_modules/
+*.vsix
