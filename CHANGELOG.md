@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.1
+
+- Swap the badge icon from ◆ to 🗨 to better represent comments and avoid confusion with other decorations
+- Fix toggle panel button disappearing and not closing the panel
+- Change default theme color
+- Fix type error in getAuthor return value
+
 ## 0.1.0
 
 - Initial release
