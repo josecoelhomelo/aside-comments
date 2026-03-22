@@ -23,6 +23,16 @@
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "annotations",
+    "bookmarks",
+    "code-review",
+	"collaboration",
+	"collaborative",
+    "comments",
+    "notes",
+	"panel"
+  ],
   "activationEvents": [
     "onStartupFinished"
   ],

@@ -1,6 +1,6 @@
 # Aside Comments
 
-Word-style margin comments for VS Code. Add comments alongside your code without modifying source files.
+Collaborative word-style margin comments for VS Code. Add comments alongside your code without modifying source files.
 
 ## Demo
 
