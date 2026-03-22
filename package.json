@@ -61,6 +61,11 @@
         }
       },
       {
+        "command": "asideComments.searchComment",
+        "title": "Search Comments",
+        "category": "Aside Comments",
+        "icon": "$(search)"
+      },
       {
         "command": "asideComments.togglePanel",
         "title": "Toggle Comments Panel",

@@ -10,6 +10,7 @@ import { registerEditComment } from './commands/editComment';
 import { registerDeleteComment } from './commands/deleteComment';
 import { registerNavigateComments } from './commands/navigateComments';
 import { registerAddFileComment } from './commands/addFileComment';
+import { registerSearchComment } from './commands/searchComment';
 
 export function activate(context: vscode.ExtensionContext): void {
 	const config = vscode.workspace.getConfiguration('asideComments');
@@ -56,6 +57,7 @@ export function activate(context: vscode.ExtensionContext): void {
 	registerDeleteComment(context, store);
 	registerNavigateComments(context, store);
 	registerAddFileComment(context, store, panelProvider);
+	registerSearchComment(context, store, fileMapper);
 
 	// Update hasComments context for editor title bar buttons
 	async function updateHasCommentsContext() {
