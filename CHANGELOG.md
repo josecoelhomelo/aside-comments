@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1
+
+- Add search icon in tree view title for searching comments
+- Create package tags for better discoverability while improving README
+
 ## 0.2.0
 
 - Rename all identifiers from `aside.*` to `asideComments.*` for clarity in settings, commands, and UI

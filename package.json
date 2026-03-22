@@ -2,7 +2,7 @@
   "name": "aside-comments",
   "displayName": "Aside Comments",
   "description": "Word-style margin comments on code files, stored separately from source code.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "publisher": "josecoelhomelo",
   "author": {
     "name": "josecoelhomelo"
