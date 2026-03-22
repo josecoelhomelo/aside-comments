@@ -37,7 +37,38 @@ export class DecorationManager {
 			context.subscriptions
 		);
 
+		// Recreate decoration types when settings change
+		vscode.workspace.onDidChangeConfiguration(
+			(e) => {
+				if (
+					e.affectsConfiguration('asideComments.showScrollbarIndicators') ||
+					e.affectsConfiguration('asideComments.showGutterLines')
+				) {
+					this.recreateDecorationTypes();
+				}
+			},
+			null,
+			context.subscriptions
+		);
+
 		// Apply decorations to all visible editors on startup
+		for (const editor of vscode.window.visibleTextEditors) {
+			this.refreshEditor(editor);
+		}
+	}
+
+	private recreateDecorationTypes(): void {
+		// Dispose all existing types
+		for (const type of this.colorTypes.values()) {
+			type.dispose();
+		}
+		this.colorTypes.clear();
+		this.orphanedType.dispose();
+
+		// Recreate orphaned type
+		this.orphanedType = this.createType('#FF6B6B', true);
+
+		// Refresh all visible editors
 		for (const editor of vscode.window.visibleTextEditors) {
 			this.refreshEditor(editor);
 		}
@@ -54,13 +85,21 @@ export class DecorationManager {
 	}
 
 	private createType(color: string, orphaned: boolean = false): vscode.TextEditorDecorationType {
+		const config = vscode.workspace.getConfiguration('asideComments');
+		const showScrollbar = config.get<boolean>('showScrollbarIndicators', true);
+		const showGutter = config.get<boolean>('showGutterLines', true);
 		const bgAlpha = orphaned ? 0.10 : 0.08;
+
 		return vscode.window.createTextEditorDecorationType({
-			gutterIconPath: this.getGutterSvgPath(color),
-			gutterIconSize: 'contain',
+			...(showGutter && {
+				gutterIconPath: this.getGutterSvgPath(color),
+				gutterIconSize: 'contain',
+			}),
 			isWholeLine: true,
-			overviewRulerColor: color + 'AA',
-			overviewRulerLane: vscode.OverviewRulerLane.Right,
+			...(showScrollbar && {
+				overviewRulerColor: color + 'AA',
+				overviewRulerLane: vscode.OverviewRulerLane.Right,
+			}),
 			light: {
 				backgroundColor: this.hexToRgba(color, orphaned ? 0.07 : 0.05),
 			},

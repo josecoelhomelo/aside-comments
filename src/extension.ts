@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext): void {
 	const store = new CommentStore(fileMapper);
 	const lineTracker = new LineTracker(store);
 
-	// Decorations (vertical line indicators, minimap colors, background highlights)
+	// Decorations (gutter lines, scrollbar indicators, background highlights)
 	const decorationManager = new DecorationManager(context, store);
 
 	// File decorations (badge in Explorer / Open Editors for files with comments)

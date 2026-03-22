@@ -10,7 +10,7 @@ Word-style margin comments for VS Code. Add comments alongside your code without
 
 - **Line & file comments** - select code and comment, or attach notes to an entire file
 - **Panel** - browse and edit all comments in a dedicated panel
-- **Colored indicators** - gutter lines, background highlights, and minimap markers with 8 presets + custom colors
+- **Colored indicators** - gutter lines, background highlights, and scrollbar indicators with 8 presets + custom colors
 - **File decorations** - files with comments show a badge (🗨) in the Explorer and Open Editors panels
 - **Hover tooltips** - hover commented lines for quick preview with edit/delete links
 - **Line tracking** - comments follow code as you edit, with fuzzy re-attach after external changes
@@ -30,5 +30,5 @@ Comments are stored in `.aside/` files relative to your workspace. Add `.aside/`
 | `asideComments.author` | `""` | Override auto-detected author name |
 | `asideComments.storagePath` | `.aside` | Storage folder relative to workspace root |
 | `asideComments.fuzzyMatchThreshold` | `0.7` | Similarity threshold (0-1) for re-attaching orphaned comments |
-| `asideComments.showMinimapIndicators` | `true` | Show color indicators in the minimap |
+| `asideComments.showScrollbarIndicators` | `true` | Show color indicators in the scrollbar |
 | `asideComments.showGutterLines` | `true` | Show indicators in the editor gutter |

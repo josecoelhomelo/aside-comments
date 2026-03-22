@@ -194,10 +194,10 @@
           "maximum": 1,
           "description": "Similarity threshold (0-1) for fuzzy re-attaching orphaned comments."
         },
-        "asideComments.showMinimapIndicators": {
+        "asideComments.showScrollbarIndicators": {
           "type": "boolean",
           "default": true,
-          "description": "Show color indicators in the minimap/overview ruler for commented lines."
+          "description": "Show color indicators in the scrollbar for commented lines."
         },
         "asideComments.showGutterLines": {
           "type": "boolean",
