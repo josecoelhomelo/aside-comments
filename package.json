@@ -180,7 +180,7 @@
         "asideComments.author": {
           "type": "string",
           "default": "",
-          "description": "Default author name for new comments. If empty, uses OS username."
+          "description": "Default author name for new comments. If empty, auto-detects from Microsoft/GitHub authentication, git config, or OS username."
         },
         "asideComments.storagePath": {
           "type": "string",

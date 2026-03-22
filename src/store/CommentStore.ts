@@ -297,7 +297,18 @@ export class CommentStore {
 			return this.cachedAuthor;
 		}
 
-		// Try to get VSCode logged-in user (GitHub auth)
+		// Try Microsoft auth
+		try {
+			const session = await vscode.authentication.getSession('microsoft', ['openid', 'profile'], { createIfNone: false });
+			if (session?.account?.label) {
+				this.cachedAuthor = session.account.label;
+				return this.cachedAuthor;
+			}
+		} catch {
+			// Microsoft auth not available
+		}
+
+		// Try GitHub auth
 		try {
 			const session = await vscode.authentication.getSession('github', ['user:email'], { createIfNone: false });
 			if (session?.account?.label) {
@@ -317,17 +328,6 @@ export class CommentStore {
 			}
 		} catch {
 			// Not available
-		}
-
-		// Try Microsoft auth
-		try {
-			const session = await vscode.authentication.getSession('microsoft', ['openid', 'profile'], { createIfNone: false });
-			if (session?.account?.label) {
-				this.cachedAuthor = session.account.label;
-				return this.cachedAuthor;
-			}
-		} catch {
-			// Microsoft auth not available
 		}
 
 		// Try git config user.name via shell
