@@ -183,6 +183,11 @@
           "command": "asideComments.addFolderComment",
           "when": "view == asideComments.commentsPanel && asideComments.viewingFolder",
           "group": "navigation"
+        },
+        {
+          "command": "asideComments.searchComment",
+          "when": "view == asideComments.commentedItems",
+          "group": "navigation"
         }
       ]
     },
