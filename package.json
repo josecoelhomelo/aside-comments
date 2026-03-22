@@ -19,7 +19,7 @@
   "engines": {
     "vscode": "^1.85.0"
   },
-  "icon": "resources/aside-icon.png",
+  "icon": "resources/logo.png",
   "categories": [
     "Other"
   ],
@@ -64,7 +64,7 @@
         "command": "aside.togglePanel",
         "title": "Toggle Comments Panel",
         "category": "Aside",
-        "icon": "resources/aside-icon.svg"
+        "icon": "resources/icon.svg"
       },
       {
         "command": "aside.previousComment",
@@ -144,7 +144,7 @@
         {
           "id": "aside",
           "title": "Aside Comments",
-          "icon": "resources/aside-icon.svg"
+          "icon": "resources/icon.svg"
         }
       ]
     },
