@@ -10,17 +10,30 @@ export class AsideFileDecorationProvider implements vscode.FileDecorationProvide
 	readonly onDidChangeFileDecorations = this._onDidChangeFileDecorations.event;
 
 	private readonly disposables: vscode.Disposable[] = [];
+	private enabled: boolean;
 
 	constructor(private readonly store: CommentStore) {
+		this.enabled = vscode.workspace
+			.getConfiguration('asideComments')
+			.get<boolean>('showExplorerBadges', true);
+
 		this.disposables.push(
 			store.onDidChangeComments((event) => {
 				this._onDidChangeFileDecorations.fire(event.uri);
+			}),
+			vscode.workspace.onDidChangeConfiguration((e) => {
+				if (e.affectsConfiguration('asideComments.showExplorerBadges')) {
+					this.enabled = vscode.workspace
+						.getConfiguration('asideComments')
+						.get<boolean>('showExplorerBadges', true);
+					this._onDidChangeFileDecorations.fire(undefined);
+				}
 			})
 		);
 	}
 
 	async provideFileDecoration(uri: vscode.Uri): Promise<vscode.FileDecoration | undefined> {
-		if (uri.scheme !== 'file') {
+		if (!this.enabled || uri.scheme !== 'file') {
 			return undefined;
 		}
 

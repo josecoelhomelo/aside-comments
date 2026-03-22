@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { AsideFileDecorationProvider } from '../../src/decorations/FileDecorationProvider';
-import { Uri, EventEmitter, FileDecoration } from '../__mocks__/vscode';
+import { Uri, EventEmitter, FileDecoration, workspace } from '../__mocks__/vscode';
 import type { AsideComment, CommentChangeEvent } from '../../src/types';
 
 function makeComment(overrides: Partial<AsideComment> = {}): AsideComment {
@@ -32,6 +32,10 @@ describe('AsideFileDecorationProvider', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		store = makeMockStore();
+		// Default: showExplorerBadges = true
+		workspace.getConfiguration.mockReturnValue({
+			get: vi.fn((_key: string, defaultValue?: any) => defaultValue),
+		});
 	});
 
 	describe('provideFileDecoration', () => {
@@ -71,6 +75,20 @@ describe('AsideFileDecorationProvider', () => {
 
 			const uri = Uri.parse('untitled:Untitled-1');
 			(uri as any).scheme = 'untitled';
+			const result = await provider.provideFileDecoration(uri as any);
+
+			expect(result).toBeUndefined();
+			expect(store.getComments).not.toHaveBeenCalled();
+		});
+
+		it('returns undefined when showExplorerBadges is disabled', async () => {
+			workspace.getConfiguration.mockReturnValue({
+				get: vi.fn((_key: string, _defaultValue?: any) => false),
+			});
+			store = makeMockStore([makeComment()]);
+			const provider = new AsideFileDecorationProvider(store as any);
+
+			const uri = Uri.file('/test/file.ts');
 			const result = await provider.provideFileDecoration(uri as any);
 
 			expect(result).toBeUndefined();

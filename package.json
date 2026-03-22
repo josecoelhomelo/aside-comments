@@ -227,11 +227,6 @@
           "default": "",
           "description": "Default author name for new comments. If empty, auto-detects from Microsoft/GitHub authentication, git config, or OS username."
         },
-        "asideComments.storagePath": {
-          "type": "string",
-          "default": ".aside",
-          "description": "Folder name for storing comment files, relative to workspace root."
-        },
         "asideComments.fuzzyMatchThreshold": {
           "type": "number",
           "default": 0.7,
@@ -239,15 +234,25 @@
           "maximum": 1,
           "description": "Similarity threshold (0-1) for fuzzy re-attaching orphaned comments."
         },
-        "asideComments.showScrollbarIndicators": {
+        "asideComments.showExplorerBadges": {
           "type": "boolean",
           "default": true,
-          "description": "Show color indicators in the scrollbar for commented lines."
+          "description": "Show comment badges (🗨) in the Explorer and editor tabs."
         },
         "asideComments.showGutterLines": {
           "type": "boolean",
           "default": true,
           "description": "Show comment indications in the editor gutter."
+        },
+        "asideComments.showScrollbarIndicators": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show color indicators in the scrollbar for commented lines."
+        },
+        "asideComments.storagePath": {
+          "type": "string",
+          "default": ".aside",
+          "description": "Folder name for storing comment files, relative to workspace root."
         }
       }
     }
