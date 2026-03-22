@@ -140,24 +140,28 @@ export class CommentStore {
 			return;
 		}
 
-		// Update anchor content from current file
-		try {
-			const document = await vscode.workspace.openTextDocument(sourceUri);
-			for (const comment of comments) {
-				if (comment.lineStart === -1 && comment.lineEnd === -1) {
-					continue;
-				}
+		const isFolderLike = comments.every(c => c.lineStart === -1 && c.lineEnd === -1);
 
-				const startLine = Math.max(0, comment.lineStart);
-				const endLine = Math.min(document.lineCount - 1, comment.lineEnd);
-				const lines: string[] = [];
-				for (let i = startLine; i <= endLine; i++) {
-					lines.push(document.lineAt(i).text);
+		// Update anchor content from current file
+		if (!isFolderLike) {
+			try {
+				const document = await vscode.workspace.openTextDocument(sourceUri);
+				for (const comment of comments) {
+					if (comment.lineStart === -1 && comment.lineEnd === -1) {
+						continue;
+					}
+
+					const startLine = Math.max(0, comment.lineStart);
+					const endLine = Math.min(document.lineCount - 1, comment.lineEnd);
+					const lines: string[] = [];
+					for (let i = startLine; i <= endLine; i++) {
+						lines.push(document.lineAt(i).text);
+					}
+					comment.anchorContent = lines.join('\n');
 				}
-				comment.anchorContent = lines.join('\n');
+			} catch {
+				// File might not be open; keep existing anchorContent
 			}
-		} catch {
-			// File might not be open; keep existing anchorContent
 		}
 
 		if (comments.length === 0) {
@@ -173,11 +177,13 @@ export class CommentStore {
 
 		// Compute file hash
 		let fileHash = '';
-		try {
-			const document = await vscode.workspace.openTextDocument(sourceUri);
-			fileHash = crypto.createHash('sha256').update(document.getText()).digest('hex');
-		} catch {
-			// Best effort
+		if (!isFolderLike) {
+			try {
+				const document = await vscode.workspace.openTextDocument(sourceUri);
+				fileHash = crypto.createHash('sha256').update(document.getText()).digest('hex');
+			} catch {
+				// Best effort
+			}
 		}
 
 		const data: AsideFileData = {

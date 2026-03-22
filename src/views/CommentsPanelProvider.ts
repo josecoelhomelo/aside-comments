@@ -9,6 +9,7 @@ export class CommentsPanelProvider implements vscode.WebviewViewProvider {
 	private view?: vscode.WebviewView;
 	private _visible = false;
 	private currentUri?: vscode.Uri;
+	private viewingFolder = false;
 	private webviewReady = false;
 	private readyCallbacks: Array<() => void> = [];
 
@@ -28,6 +29,20 @@ export class CommentsPanelProvider implements vscode.WebviewViewProvider {
 			(editor) => {
 				if (editor) {
 					this.currentUri = editor.document.uri;
+					this.exitFolderMode();
+					this.sendComments();
+				}
+			},
+			null,
+			context.subscriptions
+		);
+
+		// When viewing folder comments, switch back to file on any editor interaction
+		vscode.window.onDidChangeTextEditorSelection(
+			(event) => {
+				if (this.viewingFolder && event.textEditor === vscode.window.activeTextEditor) {
+					this.currentUri = event.textEditor.document.uri;
+					this.exitFolderMode();
 					this.sendComments();
 				}
 			},
@@ -38,6 +53,14 @@ export class CommentsPanelProvider implements vscode.WebviewViewProvider {
 
 	get visible(): boolean {
 		return this._visible;
+	}
+
+	get isViewingFolder(): boolean {
+		return this.viewingFolder;
+	}
+
+	get uri(): vscode.Uri | undefined {
+		return this.currentUri;
 	}
 
 	/**
@@ -60,6 +83,35 @@ export class CommentsPanelProvider implements vscode.WebviewViewProvider {
 				resolve();
 			});
 		});
+	}
+
+	/**
+	 * Switch the panel to display comments for a specific URI (file or folder).
+	 */
+	setCurrentUri(uri: vscode.Uri, isFolder = false): void {
+		this.currentUri = uri;
+		this.viewingFolder = isFolder;
+		vscode.commands.executeCommand('setContext', 'asideComments.viewingFolder', isFolder);
+		this.sendViewMode();
+		this.sendComments();
+	}
+
+	private exitFolderMode(): void {
+		if (!this.viewingFolder) {
+			return;
+		}
+		this.viewingFolder = false;
+		vscode.commands.executeCommand('setContext', 'asideComments.viewingFolder', false);
+		this.sendViewMode();
+	}
+
+	private sendViewMode(): void {
+		if (this.view && this.webviewReady) {
+			this.view.webview.postMessage({
+				type: 'updateViewMode',
+				isFolder: this.viewingFolder,
+			});
+		}
 	}
 
 	/**

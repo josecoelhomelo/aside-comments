@@ -80,6 +80,22 @@
           "light": "resources/light/comment-previous.svg",
           "dark": "resources/dark/comment-previous.svg"
         }
+      },
+      {
+        "command": "asideComments.addFolderComment",
+        "title": "Add Folder Comment",
+        "category": "Aside Comments",
+        "icon": "$(new-folder)"
+      },
+      {
+        "command": "asideComments.viewFolderComments",
+        "title": "View Folder Comments",
+        "category": "Aside Comments"
+      },
+      {
+        "command": "asideComments.openFileComments",
+        "title": "View File Comments",
+        "category": "Aside Comments"
       }
     ],
     "keybindings": [
@@ -122,7 +138,22 @@
         {
           "command": "asideComments.addFileComment",
           "group": "asideComments",
-          "when": "resourceScheme == file"
+          "when": "resourceScheme == file && !explorerResourceIsFolder"
+        },
+        {
+          "command": "asideComments.openFileComments",
+          "group": "asideComments",
+          "when": "resourceScheme == file && !explorerResourceIsFolder"
+        },
+        {
+          "command": "asideComments.addFolderComment",
+          "group": "asideComments",
+          "when": "explorerResourceIsFolder"
+        },
+        {
+          "command": "asideComments.viewFolderComments",
+          "group": "asideComments",
+          "when": "explorerResourceIsFolder"
         }
       ],
       "editor/title/context": [
@@ -130,17 +161,27 @@
           "command": "asideComments.addFileComment",
           "group": "asideComments",
           "when": "resourceScheme == file"
+        },
+        {
+          "command": "asideComments.openFileComments",
+          "group": "asideComments",
+          "when": "resourceScheme == file"
         }
       ],
       "view/title": [
         {
           "command": "asideComments.addComment",
-          "when": "view == asideComments.commentsPanel",
+          "when": "view == asideComments.commentsPanel && !asideComments.viewingFolder",
           "group": "navigation"
         },
         {
           "command": "asideComments.addFileComment",
-          "when": "view == asideComments.commentsPanel",
+          "when": "view == asideComments.commentsPanel && !asideComments.viewingFolder",
+          "group": "navigation"
+        },
+        {
+          "command": "asideComments.addFolderComment",
+          "when": "view == asideComments.commentsPanel && asideComments.viewingFolder",
           "group": "navigation"
         }
       ]
@@ -162,8 +203,8 @@
           "name": "Comments"
         },
         {
-          "id": "asideComments.filesWithComments",
-          "name": "Files with Comments"
+          "id": "asideComments.commentedItems",
+          "name": "Commented Items"
         }
       ]
     },

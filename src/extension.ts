@@ -10,6 +10,7 @@ import { registerEditComment } from './commands/editComment';
 import { registerDeleteComment } from './commands/deleteComment';
 import { registerNavigateComments } from './commands/navigateComments';
 import { registerAddFileComment } from './commands/addFileComment';
+import { registerAddFolderComment } from './commands/addFolderComment';
 import { registerSearchComment } from './commands/searchComment';
 import { FilesTreeProvider } from './views/FilesTreeProvider';
 
@@ -41,10 +42,10 @@ export function activate(context: vscode.ExtensionContext): void {
 		)
 	);
 
-	// Files with Comments tree view
+	// Commented Items tree view
 	const filesTreeProvider = new FilesTreeProvider(store, fileMapper);
 	context.subscriptions.push(
-		vscode.window.createTreeView('asideComments.filesWithComments', {
+		vscode.window.createTreeView('asideComments.commentedItems', {
 			treeDataProvider: filesTreeProvider,
 			showCollapseAll: false,
 		}),
@@ -68,6 +69,30 @@ export function activate(context: vscode.ExtensionContext): void {
 	registerDeleteComment(context, store);
 	registerNavigateComments(context, store);
 	registerAddFileComment(context, store, panelProvider);
+	registerAddFolderComment(context, store, panelProvider);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('asideComments.viewFolderComments', async (uri?: vscode.Uri) => {
+			if (!uri) {
+				vscode.window.showWarningMessage('No folder selected.');
+				return;
+			}
+			panelProvider.setCurrentUri(uri, true);
+			await panelProvider.revealAndWaitForReady();
+		})
+	);
+
+	// Open a file and switch the panel to its comments (used by tree view)
+	context.subscriptions.push(
+		vscode.commands.registerCommand('asideComments.openFileComments', async (uri?: vscode.Uri) => {
+			if (!uri) {
+				return;
+			}
+			panelProvider.setCurrentUri(uri, false);
+			await vscode.commands.executeCommand('vscode.open', uri);
+		})
+	);
+
 	registerSearchComment(context, store, fileMapper);
 
 	// Update hasComments context for editor title bar buttons

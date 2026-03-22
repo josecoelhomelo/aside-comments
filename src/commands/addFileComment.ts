@@ -10,6 +10,7 @@ export function registerAddFileComment(
 	const disposable = vscode.commands.registerCommand('asideComments.addFileComment', async (uri?: vscode.Uri) => {
 		// When invoked from explorer/tab context menu, VS Code passes the URI.
 		// When invoked from command palette/keyboard, fall back to active editor.
+		const externalUri = !!uri;
 		if (!uri) {
 			const editor = vscode.window.activeTextEditor;
 			if (!editor) {
@@ -17,6 +18,12 @@ export function registerAddFileComment(
 				return;
 			}
 			uri = editor.document.uri;
+		}
+
+		// When the URI was provided externally (e.g. explorer/tab context menu),
+		// explicitly set it so the panel targets the correct file.
+		if (externalUri) {
+			panelProvider.setCurrentUri(uri);
 		}
 
 		// Open the panel and wait for the webview to be ready

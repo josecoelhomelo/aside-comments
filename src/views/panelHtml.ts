@@ -389,6 +389,7 @@ export function getPanelHtml(
 		let editingId = null;
 		let addContext = null;
 		let selectedColor = DEFAULT_COLOR;
+		let viewMode = 'file'; // 'file' | 'folder'
 
 		function escapeHtml(text) {
 			const div = document.createElement('div');
@@ -426,6 +427,11 @@ export function getPanelHtml(
 			if (comments.length === 0) {
 				header.style.display = 'none';
 				empty.style.display = formMode ? 'none' : 'block';
+				if (viewMode === 'folder') {
+					empty.innerHTML = '<p>No comments on this folder.</p><p class="hint">Right-click the folder and choose "Add Folder Comment" to add one.</p>';
+				} else {
+					empty.innerHTML = '<p>No comments in this file.</p><p class="hint">Select code and press <kbd>Ctrl+Shift+M</kbd> to add one.</p>';
+				}
 				container.innerHTML = '';
 				return;
 			}
@@ -442,7 +448,7 @@ export function getPanelHtml(
 				});
 				const isFileLevel = c.lineStart === -1 && c.lineEnd === -1;
 				const lineRange = isFileLevel
-					? 'File'
+					? (viewMode === 'folder' ? 'Folder' : 'File')
 					: c.lineStart === c.lineEnd
 						? 'Line ' + (c.lineStart + 1)
 						: 'Lines ' + (c.lineStart + 1) + '\\u2013' + (c.lineEnd + 1);
@@ -612,6 +618,10 @@ export function getPanelHtml(
 						anchorContent: msg.anchorContent,
 					};
 					showForm('add', 'Add comment for ' + msg.lineLabel, '', null);
+					break;
+				case 'updateViewMode':
+					viewMode = msg.isFolder ? 'folder' : 'file';
+					render();
 					break;
 				case 'startEdit': {
 					const comment = comments.find(c => c.id === msg.commentId);
