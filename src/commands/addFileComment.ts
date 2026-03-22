@@ -7,7 +7,7 @@ export function registerAddFileComment(
 	store: CommentStore,
 	panelProvider: CommentsPanelProvider
 ): void {
-	const disposable = vscode.commands.registerCommand('aside.addFileComment', async (uri?: vscode.Uri) => {
+	const disposable = vscode.commands.registerCommand('asideComments.addFileComment', async (uri?: vscode.Uri) => {
 		// When invoked from explorer/tab context menu, VS Code passes the URI.
 		// When invoked from command palette/keyboard, fall back to active editor.
 		if (!uri) {

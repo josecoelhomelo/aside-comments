@@ -7,7 +7,7 @@ export function registerDeleteComment(
 	store: CommentStore
 ): void {
 	const disposable = vscode.commands.registerCommand(
-		'aside.deleteComment',
+		'asideComments.deleteComment',
 		async (sourceUri?: vscode.Uri | string, commentId?: string) => {
 			// Handle string URIs from command links in hover tooltips
 			if (typeof sourceUri === 'string') {

@@ -1,5 +1,5 @@
 {
-  "name": "aside",
+  "name": "aside-comments",
   "displayName": "Aside Comments",
   "description": "Word-style margin comments on code files, stored separately from source code.",
   "version": "0.1.1",
@@ -30,46 +30,47 @@
   "contributes": {
     "commands": [
       {
-        "command": "aside.addComment",
+        "command": "asideComments.addComment",
         "title": "Add Comment",
-        "category": "Aside",
+        "category": "Aside Comments",
         "icon": "$(add)"
       },
       {
-        "command": "aside.addFileComment",
+        "command": "asideComments.addFileComment",
         "title": "Add File Comment",
-        "category": "Aside",
+        "category": "Aside Comments",
         "icon": "$(file-add)"
       },
       {
-        "command": "aside.editComment",
+        "command": "asideComments.editComment",
         "title": "Edit Comment",
-        "category": "Aside"
+        "category": "Aside Comments"
       },
       {
-        "command": "aside.deleteComment",
+        "command": "asideComments.deleteComment",
         "title": "Delete Comment",
-        "category": "Aside"
+        "category": "Aside Comments"
       },
       {
-        "command": "aside.nextComment",
+        "command": "asideComments.nextComment",
         "title": "Go to Next Comment",
-        "category": "Aside",
+        "category": "Aside Comments",
         "icon": {
           "light": "resources/light/comment-next.svg",
           "dark": "resources/dark/comment-next.svg"
         }
       },
       {
-        "command": "aside.togglePanel",
+      {
+        "command": "asideComments.togglePanel",
         "title": "Toggle Comments Panel",
-        "category": "Aside",
+        "category": "Aside Comments",
         "icon": "resources/icon.svg"
       },
       {
-        "command": "aside.previousComment",
+        "command": "asideComments.previousComment",
         "title": "Go to Previous Comment",
-        "category": "Aside",
+        "category": "Aside Comments",
         "icon": {
           "light": "resources/light/comment-previous.svg",
           "dark": "resources/dark/comment-previous.svg"
@@ -78,7 +79,7 @@
     ],
     "keybindings": [
       {
-        "command": "aside.addComment",
+        "command": "asideComments.addComment",
         "key": "ctrl+shift+m",
         "mac": "cmd+shift+m",
         "when": "editorTextFocus"
@@ -87,54 +88,54 @@
     "menus": {
       "editor/context": [
         {
-          "command": "aside.addComment",
+          "command": "asideComments.addComment",
           "group": "aside@1"
         },
         {
-          "command": "aside.addFileComment",
+          "command": "asideComments.addFileComment",
           "group": "aside@2"
         }
       ],
       "editor/title": [
         {
-          "command": "aside.previousComment",
+          "command": "asideComments.previousComment",
           "group": "navigation@1",
-          "when": "aside.hasLineComments"
+          "when": "asideComments.hasLineComments"
         },
         {
-          "command": "aside.nextComment",
+          "command": "asideComments.nextComment",
           "group": "navigation@2",
-          "when": "aside.hasLineComments"
+          "when": "asideComments.hasLineComments"
         },
         {
-          "command": "aside.togglePanel",
+          "command": "asideComments.togglePanel",
           "group": "navigation@3",
           "when": "activeEditor"
         }
       ],
       "explorer/context": [
         {
-          "command": "aside.addFileComment",
-          "group": "aside",
+          "command": "asideComments.addFileComment",
+          "group": "asideComments",
           "when": "resourceScheme == file"
         }
       ],
       "editor/title/context": [
         {
-          "command": "aside.addFileComment",
-          "group": "aside",
+          "command": "asideComments.addFileComment",
+          "group": "asideComments",
           "when": "resourceScheme == file"
         }
       ],
       "view/title": [
         {
-          "command": "aside.addComment",
-          "when": "view == aside.commentsPanel",
+          "command": "asideComments.addComment",
+          "when": "view == asideComments.commentsPanel",
           "group": "navigation"
         },
         {
-          "command": "aside.addFileComment",
-          "when": "view == aside.commentsPanel",
+          "command": "asideComments.addFileComment",
+          "when": "view == asideComments.commentsPanel",
           "group": "navigation"
         }
       ]
@@ -142,24 +143,24 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "aside",
+          "id": "asideComments",
           "title": "Aside Comments",
           "icon": "resources/icon.svg"
         }
       ]
     },
     "views": {
-      "aside": [
+      "asideComments": [
         {
           "type": "webview",
-          "id": "aside.commentsPanel",
+          "id": "asideComments.commentsPanel",
           "name": "Comments"
         }
       ]
     },
     "colors": [
       {
-        "id": "aside.indicatorColor",
+        "id": "asideComments.indicatorColor",
         "description": "Color for comment indicators",
         "defaults": {
           "dark": "#007acc",
@@ -171,29 +172,29 @@
     "configuration": {
       "title": "Aside Comments",
       "properties": {
-        "aside.author": {
+        "asideComments.author": {
           "type": "string",
           "default": "",
           "description": "Default author name for new comments. If empty, uses OS username."
         },
-        "aside.storagePath": {
+        "asideComments.storagePath": {
           "type": "string",
           "default": ".aside",
           "description": "Folder name for storing comment files, relative to workspace root."
         },
-        "aside.fuzzyMatchThreshold": {
+        "asideComments.fuzzyMatchThreshold": {
           "type": "number",
           "default": 0.7,
           "minimum": 0,
           "maximum": 1,
           "description": "Similarity threshold (0-1) for fuzzy re-attaching orphaned comments."
         },
-        "aside.showMinimapIndicators": {
+        "asideComments.showMinimapIndicators": {
           "type": "boolean",
           "default": true,
           "description": "Show color indicators in the minimap/overview ruler for commented lines."
         },
-        "aside.showGutterLines": {
+        "asideComments.showGutterLines": {
           "type": "boolean",
           "default": true,
           "description": "Show comment indications in the editor gutter."

@@ -6,10 +6,10 @@ export function registerNavigateComments(
 	store: CommentStore
 ): void {
 	context.subscriptions.push(
-		vscode.commands.registerCommand('aside.nextComment', async () => {
+		vscode.commands.registerCommand('asideComments.nextComment', async () => {
 			await navigate(store, 'next');
 		}),
-		vscode.commands.registerCommand('aside.previousComment', async () => {
+		vscode.commands.registerCommand('asideComments.previousComment', async () => {
 			await navigate(store, 'previous');
 		})
 	);

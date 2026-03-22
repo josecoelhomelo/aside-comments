@@ -287,7 +287,7 @@ export class CommentStore {
 
 	private async getAuthor(): Promise<string> {
 		// Check configured author first
-		const configured = vscode.workspace.getConfiguration('aside').get<string>('author');
+		const configured = vscode.workspace.getConfiguration('asideComments').get<string>('author');
 		if (configured) {
 			return configured;
 		}

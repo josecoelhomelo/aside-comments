@@ -32,7 +32,7 @@ export class AsideFileDecorationProvider implements vscode.FileDecorationProvide
 		return new vscode.FileDecoration(
 			'🗨',
 			'Aside: Has comments',
-			new vscode.ThemeColor('aside.indicatorColor')
+			new vscode.ThemeColor('asideComments.indicatorColor')
 		);
 	}
 

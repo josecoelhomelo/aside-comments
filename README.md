@@ -27,8 +27,8 @@ Comments are stored in `.aside/` files relative to your workspace. Add `.aside/`
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `aside.author` | `""` | Override auto-detected author name |
-| `aside.storagePath` | `.aside` | Storage folder relative to workspace root |
-| `aside.fuzzyMatchThreshold` | `0.7` | Similarity threshold (0-1) for re-attaching orphaned comments |
-| `aside.showMinimapIndicators` | `true` | Show indicators in the overview ruler |
-| `aside.showGutterLines` | `true` | Show indicators in the editor gutter |
+| `asideComments.author` | `""` | Override auto-detected author name |
+| `asideComments.storagePath` | `.aside` | Storage folder relative to workspace root |
+| `asideComments.fuzzyMatchThreshold` | `0.7` | Similarity threshold (0-1) for re-attaching orphaned comments |
+| `asideComments.showMinimapIndicators` | `true` | Show color indicators in the minimap |
+| `asideComments.showGutterLines` | `true` | Show indicators in the editor gutter |

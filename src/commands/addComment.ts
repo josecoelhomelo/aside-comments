@@ -7,7 +7,7 @@ export function registerAddComment(
 	store: CommentStore,
 	panelProvider: CommentsPanelProvider
 ): void {
-	const disposable = vscode.commands.registerCommand('aside.addComment', async () => {
+	const disposable = vscode.commands.registerCommand('asideComments.addComment', async () => {
 		const editor = vscode.window.activeTextEditor;
 		if (!editor) {
 			vscode.window.showWarningMessage('No active editor to add a comment to.');

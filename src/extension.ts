@@ -12,7 +12,7 @@ import { registerNavigateComments } from './commands/navigateComments';
 import { registerAddFileComment } from './commands/addFileComment';
 
 export function activate(context: vscode.ExtensionContext): void {
-	const config = vscode.workspace.getConfiguration('aside');
+	const config = vscode.workspace.getConfiguration('asideComments');
 	const storagePath = config.get<string>('storagePath', '.aside');
 
 	// Core services
@@ -41,11 +41,11 @@ export function activate(context: vscode.ExtensionContext): void {
 
 	// Toggle panel command — opens or closes the comments panel
 	context.subscriptions.push(
-		vscode.commands.registerCommand('aside.togglePanel', () => {
+		vscode.commands.registerCommand('asideComments.togglePanel', () => {
 			if (panelProvider.visible) {
 				vscode.commands.executeCommand('workbench.action.closeAuxiliaryBar');
 			} else {
-				vscode.commands.executeCommand('aside.commentsPanel.focus');
+				vscode.commands.executeCommand('asideComments.commentsPanel.focus');
 			}
 		})
 	);
@@ -63,11 +63,11 @@ export function activate(context: vscode.ExtensionContext): void {
 		if (editor) {
 			const comments = await store.getComments(editor.document.uri);
 			const hasLineComments = comments.some(c => c.lineStart >= 0);
-			vscode.commands.executeCommand('setContext', 'aside.hasComments', comments.length > 0);
-			vscode.commands.executeCommand('setContext', 'aside.hasLineComments', hasLineComments);
+			vscode.commands.executeCommand('setContext', 'asideComments.hasComments', comments.length > 0);
+			vscode.commands.executeCommand('setContext', 'asideComments.hasLineComments', hasLineComments);
 		} else {
-			vscode.commands.executeCommand('setContext', 'aside.hasComments', false);
-			vscode.commands.executeCommand('setContext', 'aside.hasLineComments', false);
+			vscode.commands.executeCommand('setContext', 'asideComments.hasComments', false);
+			vscode.commands.executeCommand('setContext', 'asideComments.hasLineComments', false);
 		}
 	}
 
@@ -179,9 +179,9 @@ export function activate(context: vscode.ExtensionContext): void {
 	// React to configuration changes
 	context.subscriptions.push(
 		vscode.workspace.onDidChangeConfiguration((event) => {
-			if (event.affectsConfiguration('aside.storagePath')) {
+			if (event.affectsConfiguration('asideComments.storagePath')) {
 				const newPath = vscode.workspace
-					.getConfiguration('aside')
+					.getConfiguration('asideComments')
 					.get<string>('storagePath', '.aside');
 				fileMapper.updateStorageFolderName(newPath);
 			}
@@ -190,15 +190,15 @@ export function activate(context: vscode.ExtensionContext): void {
 
 	// On first activation, attempt to move the comments panel to the secondary side bar.
 	// This is best-effort; if it fails the user can drag the panel manually.
-	const isFirstRun = !context.globalState.get<boolean>('aside.movedToSecondarySidebar');
+	const isFirstRun = !context.globalState.get<boolean>('asideComments.movedToSecondarySidebar');
 	if (isFirstRun) {
-		context.globalState.update('aside.movedToSecondarySidebar', true);
+		context.globalState.update('asideComments.movedToSecondarySidebar', true);
 		setTimeout(async () => {
 			try {
-				await vscode.commands.executeCommand('aside.commentsPanel.focus');
+				await vscode.commands.executeCommand('asideComments.commentsPanel.focus');
 				await vscode.commands.executeCommand(
 					'workbench.action.moveActivityBarEntry',
-					{ from: 'workbench.view.extension.aside', to: 'auxiliarybar' }
+					{ from: 'workbench.view.extension.asideComments', to: 'auxiliarybar' }
 				);
 			} catch {
 				// Best effort — user can right-click the Aside icon and choose

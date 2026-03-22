@@ -166,7 +166,7 @@ export class DecorationManager {
 		const editArgs = encodeURIComponent(JSON.stringify([document.uri.toString(), c.id]));
 		const deleteArgs = encodeURIComponent(JSON.stringify([document.uri.toString(), c.id]));
 		md.appendMarkdown(
-			`[Edit](command:aside.editComment?${editArgs}) · [Delete](command:aside.deleteComment?${deleteArgs})\n\n`
+			`[Edit](command:asideComments.editComment?${editArgs}) · [Delete](command:asideComments.deleteComment?${deleteArgs})\n\n`
 		);
 
 		return md;

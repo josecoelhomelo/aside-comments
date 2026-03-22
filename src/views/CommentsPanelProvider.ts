@@ -4,7 +4,7 @@ import { CommentStore } from '../store/CommentStore';
 import { getPanelHtml } from './panelHtml';
 
 export class CommentsPanelProvider implements vscode.WebviewViewProvider {
-	public static readonly viewType = 'aside.commentsPanel';
+	public static readonly viewType = 'asideComments.commentsPanel';
 
 	private view?: vscode.WebviewView;
 	private _visible = false;
@@ -44,7 +44,7 @@ export class CommentsPanelProvider implements vscode.WebviewViewProvider {
 	 * Reveal the panel and wait until the webview is ready to receive messages.
 	 */
 	async revealAndWaitForReady(timeout = 3000): Promise<void> {
-		await vscode.commands.executeCommand('aside.commentsPanel.focus');
+		await vscode.commands.executeCommand('asideComments.commentsPanel.focus');
 
 		if (this.webviewReady) {
 			return;
@@ -114,7 +114,7 @@ export class CommentsPanelProvider implements vscode.WebviewViewProvider {
 						break;
 					case 'delete':
 						await vscode.commands.executeCommand(
-							'aside.deleteComment',
+							'asideComments.deleteComment',
 							this.currentUri,
 							message.commentId
 						);

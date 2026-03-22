@@ -8,7 +8,7 @@ export function registerEditComment(
 	panelProvider: CommentsPanelProvider
 ): void {
 	const disposable = vscode.commands.registerCommand(
-		'aside.editComment',
+		'asideComments.editComment',
 		async (sourceUri?: vscode.Uri | string, commentId?: string) => {
 			if (typeof sourceUri === 'string') {
 				sourceUri = vscode.Uri.parse(sourceUri);
