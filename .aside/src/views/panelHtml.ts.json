@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "fileHash": "a55fed283d14eedb43cb9cfd1220f9a7873ca0dbf9b58d3f91803c56353388cf",
+  "comments": [
+    {
+      "id": "eeb6b21e-695f-471d-9b3d-5bffd91bab32",
+      "lineStart": 18,
+      "lineEnd": 23,
+      "text": "meow",
+      "author": "José Melo",
+      "createdAt": "2026-03-22T02:40:21.369Z",
+      "updatedAt": "2026-03-22T02:40:21.369Z",
+      "anchorContent": "\t<meta charset=\"UTF-8\">\n\t<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; style-src ${cspSource} 'nonce-${nonce}'; script-src 'nonce-${nonce}';\">\n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n\t<style nonce=\"${nonce}\">\n\t\t:root {\n\t\t\t--card-bg: var(--vscode-editor-background);",
+      "color": "#FF8A65"
+    }
+  ]
+}

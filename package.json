@@ -160,6 +160,10 @@
           "type": "webview",
           "id": "asideComments.commentsPanel",
           "name": "Comments"
+        },
+        {
+          "id": "asideComments.filesWithComments",
+          "name": "Files with Comments"
         }
       ]
     },

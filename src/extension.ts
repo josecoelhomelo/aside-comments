@@ -11,6 +11,7 @@ import { registerDeleteComment } from './commands/deleteComment';
 import { registerNavigateComments } from './commands/navigateComments';
 import { registerAddFileComment } from './commands/addFileComment';
 import { registerSearchComment } from './commands/searchComment';
+import { FilesTreeProvider } from './views/FilesTreeProvider';
 
 export function activate(context: vscode.ExtensionContext): void {
 	const config = vscode.workspace.getConfiguration('asideComments');
@@ -38,6 +39,16 @@ export function activate(context: vscode.ExtensionContext): void {
 			CommentsPanelProvider.viewType,
 			panelProvider
 		)
+	);
+
+	// Files with Comments tree view
+	const filesTreeProvider = new FilesTreeProvider(store, fileMapper);
+	context.subscriptions.push(
+		vscode.window.createTreeView('asideComments.filesWithComments', {
+			treeDataProvider: filesTreeProvider,
+			showCollapseAll: false,
+		}),
+		filesTreeProvider
 	);
 
 	// Toggle panel command — opens or closes the comments panel
