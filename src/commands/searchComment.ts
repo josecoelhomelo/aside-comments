@@ -1,18 +1,21 @@
 import * as vscode from 'vscode';
 import { CommentStore } from '../store/CommentStore';
 import { FileMapper } from '../store/FileMapper';
-import { AsideComment, AsideFileData, isFileComment } from '../types';
+import { CommentsPanelProvider } from '../views/CommentsPanelProvider';
+import { AsideComment, isFileComment } from '../types';
 
 interface SearchResult {
 	comment: AsideComment;
 	sourceUri: vscode.Uri;
 	relativePath: string;
+	isFolder: boolean;
 }
 
 export function registerSearchComment(
 	context: vscode.ExtensionContext,
 	store: CommentStore,
-	fileMapper: FileMapper
+	fileMapper: FileMapper,
+	panelProvider: CommentsPanelProvider
 ): void {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('asideComments.searchComment', async () => {
@@ -33,9 +36,7 @@ export function registerSearchComment(
 			}
 
 			const items = results.map(r => {
-				const location = isFileComment(r.comment)
-					? 'file comment'
-					: `line ${r.comment.lineStart + 1}`;
+				const location = getResultLocation(r);
 
 				return {
 					label: r.comment.text,
@@ -55,7 +56,14 @@ export function registerSearchComment(
 				return;
 			}
 
-			const { sourceUri, comment } = picked.result;
+			const { sourceUri, comment, isFolder } = picked.result;
+
+			if (isFolder) {
+				panelProvider.setCurrentUri(sourceUri, true);
+				await panelProvider.revealAndWaitForReady();
+				return;
+			}
+
 			const document = await vscode.workspace.openTextDocument(sourceUri);
 			const editor = await vscode.window.showTextDocument(document);
 
@@ -90,14 +98,42 @@ async function searchComments(
 
 			const comments = await store.getComments(sourceUri);
 			const relativePath = vscode.workspace.asRelativePath(sourceUri, false);
+			const matchingComments = comments.filter(comment =>
+				comment.text.toLowerCase().includes(lowerQuery)
+			);
 
-			for (const comment of comments) {
-				if (comment.text.toLowerCase().includes(lowerQuery)) {
-					results.push({ comment, sourceUri, relativePath });
-				}
+			if (matchingComments.length === 0) {
+				continue;
+			}
+
+			const isFolder = await isDirectory(sourceUri);
+
+			for (const comment of matchingComments) {
+				results.push({ comment, sourceUri, relativePath, isFolder });
 			}
 		}
 	}
 
 	return results;
+}
+
+function getResultLocation(result: SearchResult): string {
+	if (result.isFolder) {
+		return 'folder comment';
+	}
+
+	if (isFileComment(result.comment)) {
+		return 'file comment';
+	}
+
+	return `line ${result.comment.lineStart + 1}`;
+}
+
+async function isDirectory(uri: vscode.Uri): Promise<boolean> {
+	try {
+		const stat = await vscode.workspace.fs.stat(uri);
+		return (stat.type & vscode.FileType.Directory) !== 0;
+	} catch {
+		return false;
+	}
 }

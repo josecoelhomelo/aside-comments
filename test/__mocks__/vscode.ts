@@ -116,6 +116,20 @@ export enum OverviewRulerLane {
 	Full = 7,
 }
 
+export enum FileType {
+	Unknown = 0,
+	File = 1,
+	Directory = 2,
+	SymbolicLink = 64,
+}
+
+export enum TextEditorRevealType {
+	Default = 0,
+	InCenter = 1,
+	InCenterIfOutsideViewport = 2,
+	AtTop = 3,
+}
+
 export const workspace = {
 	getWorkspaceFolder: vi.fn(),
 	workspaceFolders: [] as any[],
@@ -124,11 +138,13 @@ export const workspace = {
 		get: vi.fn((_key: string, defaultValue?: any) => defaultValue),
 	})),
 	openTextDocument: vi.fn(),
+	findFiles: vi.fn(),
 	fs: {
 		readFile: vi.fn(),
 		writeFile: vi.fn(),
 		delete: vi.fn(),
 		createDirectory: vi.fn(),
+		stat: vi.fn(),
 	},
 	onDidChangeTextDocument: vi.fn(() => ({ dispose: vi.fn() })),
 	onDidSaveTextDocument: vi.fn(() => ({ dispose: vi.fn() })),
@@ -151,6 +167,7 @@ export const window = {
 	showInformationMessage: vi.fn(),
 	showQuickPick: vi.fn(),
 	showInputBox: vi.fn(),
+	showTextDocument: vi.fn(),
 	createTextEditorDecorationType: vi.fn(() => ({ dispose: vi.fn() })),
 	onDidChangeActiveTextEditor: vi.fn(() => ({ dispose: vi.fn() })),
 	onDidChangeVisibleTextEditors: vi.fn(() => ({ dispose: vi.fn() })),

@@ -93,7 +93,7 @@ export function activate(context: vscode.ExtensionContext): void {
 		})
 	);
 
-	registerSearchComment(context, store, fileMapper);
+	registerSearchComment(context, store, fileMapper, panelProvider);
 
 	// Update hasComments context for editor title bar buttons
 	async function updateHasCommentsContext() {
