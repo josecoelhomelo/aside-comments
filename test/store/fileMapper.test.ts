@@ -13,12 +13,14 @@ function makeWorkspaceFolder(fsPath: string) {
 
 describe('FileMapper', () => {
 	let mapper: FileMapper;
+	let existingStorageFolders: Set<string>;
 	const wsRoot = '/workspace/project';
 	const wsFolder = makeWorkspaceFolder(wsRoot);
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mapper = new FileMapper('.aside');
+		existingStorageFolders = new Set();
+		mapper = new FileMapper('.aside', (storageFolderPath) => existingStorageFolders.has(path.normalize(storageFolderPath)));
 		workspace.getWorkspaceFolder.mockReturnValue(wsFolder);
 		workspace.asRelativePath.mockImplementation((uri: any, _includeRoot?: boolean) => {
 			const uriPath = typeof uri === 'string' ? uri : uri.fsPath;
@@ -50,6 +52,29 @@ describe('FileMapper', () => {
 			const result = mapper.getAsidePath(sourceUri);
 
 			const expected = path.join(wsRoot, '.aside', 'src', 'a', 'b', 'c', 'deep.ts.json');
+			expect(result!.fsPath).toBe(expected);
+		});
+
+		it('uses the nearest existing .aside folder under the opened workspace', () => {
+			const projectRoot = path.join(wsRoot, 'packages', 'app');
+			existingStorageFolders.add(path.join(projectRoot, '.aside'));
+
+			const sourceUri = Uri.file(path.join(projectRoot, 'src', 'app.ts'));
+			const result = mapper.getAsidePath(sourceUri);
+
+			const expected = path.join(projectRoot, '.aside', 'src', 'app.ts.json');
+			expect(result!.fsPath).toBe(expected);
+		});
+
+		it('prefers the deepest matching workspace folder in nested multi-root workspaces', () => {
+			const childRoot = path.join(wsRoot, 'packages', 'app');
+			const childFolder = makeWorkspaceFolder(childRoot);
+			workspace.workspaceFolders = [wsFolder, childFolder];
+
+			const sourceUri = Uri.file(path.join(childRoot, 'src', 'app.ts'));
+			const result = mapper.getAsidePath(sourceUri);
+
+			const expected = path.join(childRoot, '.aside', 'src', 'app.ts.json');
 			expect(result!.fsPath).toBe(expected);
 		});
 	});
@@ -86,6 +111,15 @@ describe('FileMapper', () => {
 
 			expect(result).toBeDefined();
 			expect(result!.fsPath).toBe(path.join(wsRoot, 'src', 'app.ts'));
+		});
+
+		it('maps an aside JSON path from a nested existing .aside folder back to its source', () => {
+			const projectRoot = path.join(wsRoot, 'packages', 'app');
+			const asideUri = Uri.file(path.join(projectRoot, '.aside', 'src', 'app.ts.json'));
+			const result = mapper.getSourcePath(asideUri);
+
+			expect(result).toBeDefined();
+			expect(result!.fsPath).toBe(path.join(projectRoot, 'src', 'app.ts'));
 		});
 
 		it('returns undefined when no workspace folder matches', () => {
@@ -137,10 +171,10 @@ describe('FileMapper', () => {
 	});
 
 	describe('getWatchPattern', () => {
-		it('returns a RelativePattern with the correct glob', () => {
+		it('returns a RelativePattern that includes nested .aside folders', () => {
 			const result = mapper.getWatchPattern(wsFolder as any);
 			expect(result).toBeInstanceOf(RelativePattern);
-			expect(result.pattern).toBe('.aside/**/*.json');
+			expect(result.pattern).toBe('**/.aside/**/*.json');
 		});
 	});
 

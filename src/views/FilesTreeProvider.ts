@@ -35,8 +35,7 @@ export class FilesTreeProvider implements vscode.TreeDataProvider<FileTreeItem> 
 		const allItems: { sourceUri: vscode.Uri; commentCount: number; isFolder: boolean; relativePath: string; fileName: string }[] = [];
 
 		for (const folder of folders) {
-			const storageFolder = this.fileMapper.getStorageFolder(folder);
-			const pattern = new vscode.RelativePattern(storageFolder, '**/*.json');
+			const pattern = this.fileMapper.getWatchPattern(folder);
 
 			let asideFiles: vscode.Uri[];
 			try {
