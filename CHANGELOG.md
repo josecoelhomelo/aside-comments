@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.3
+
+- Open folder comment search results in the panel for that folder, and label them as folder comments in search results
+- Reuse existing nested `.aside` folders when opening multi-root workspaces or parent folders, keeping comment storage, highlighting, badges, search, and the commented items tree aligned with the correct project
+
 ## 0.2.2
 
 - Update package's description
